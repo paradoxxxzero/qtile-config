@@ -13,9 +13,12 @@ keys = [
     Key([mod, "shift"], "Tab", lazy.layout.previous()),
     Key([mod, "shift"], "j", lazy.spawn("amixer -c 0 -q set Master 2dB-")),
     Key([mod, "shift"], "k", lazy.spawn("amixer -c 0 -q set Master 2dB+")),
+    Key([mod, "shift"], "q", lazy.shutdown()),
     Key([mod, "shift"], "space", lazy.layout.rotate()),
     Key([mod], "Left", lazy.group.prevgroup()),
     Key([mod], "Right", lazy.group.nextgroup()),
+    Key([mod], "Up", lazy.to_next_screen()),
+    Key([mod], "Down", lazy.to_prev_screen()),
     Key([mod], "Tab", lazy.layout.next()),
     Key([mod], "f", lazy.window.toggle_floating()),
     Key([mod], "g", lazy.togroup()),
@@ -23,12 +26,18 @@ keys = [
     Key([mod], "j", lazy.layout.up()),
     Key([mod], "k", lazy.layout.down()),
     Key([mod], "q", lazy.restart()),
+    Key([mod], "l", lazy.spawn('alock -auth pam -bg blank')),
     Key([mod], "space", lazy.nextlayout()),
     Key([mod], "Return", lazy.spawn('urxvt')),
     Key([mod], "w", lazy.window.kill()),
     Key([mod], "BackSpace", lazy.spawn(
         "dmenu_run -i -b -fn 'monofur:pixelsize=16:antialias=true'"
         " -p 'Run' -nf '#ffffff' -nb '#202020'")),
+    Key([mod], "XF86AudioPlay", lazy.spawn('mpc -h entrecote toggle')),
+    Key([mod], "XF86AudioLowerVolume", lazy.spawn(
+        'mpc -h entrecote volume -2')),
+    Key([mod], "XF86AudioRaiseVolume", lazy.spawn(
+        'mpc -h entrecote volume +2')),
 ]
 
 mouse = [
@@ -39,66 +48,52 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
-groups = []
-
-for i in groups:
-    keys.append(
-        Key(["mod4"], i.name, lazy.group[i.name].toscreen())
-    )
-    keys.append(
-        Key(["mod4", "shift"], i.name, lazy.window.togroup(i.name))
-    )
-
-
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
     layout.Tile(ratio=0.25),
 ]
 
-defaults = {'font': 'monofur', 'fontsize': 16}
+groups = []
+
+defaults = {'font': 'monofur', 'fontsize': 12}
+top_bar_heigth = 26
+bottom_bar_heigth = 18
 screens = [
     Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(
-                    this_screen_border='0000FF',
-                    borderwidth=2, padding=4, active=liteblue, **defaults),
-                widget.Sep(),
-                widget.Prompt(foreground=liteblue, **defaults),
-                widget.WindowName(
-                    margin_x=6, foreground=liteblue, **defaults),
-                widget.Mpd(host='entrecote', **defaults),
-                widget.CPUGraph(
-                    width=1000, graph_color=liteblue, fill_color='001188',
-                    border_color='000000'),
-                widget.Systray()
-            ],
-            28
-        ),
+        top=bar.Bar([
+            widget.GroupBox(
+                this_screen_border='0000FF',
+                borderwidth=2, padding=4, active=liteblue, **defaults),
+            widget.Prompt(foreground=liteblue, **defaults),
+            widget.WindowName(
+                margin_x=6, foreground=liteblue, **defaults),
+            widget.Systray(),
+            widget.Mpd(host='entrecote', **defaults)
+        ], top_bar_heigth),
+        bottom=bar.Bar([
+            widget.CPUGraph(
+                width=1920, graph_color=liteblue, fill_color='0000FF',
+                samples=1000, frequency=0.1, border_color='000000'),
+        ], bottom_bar_heigth)
     ),
     Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(
-                    this_screen_border='00FF00',
-                    borderwidth=2, padding=4, active=litegreen, **defaults),
-                widget.Sep(),
-                widget.Prompt(),
-                widget.WindowName(
-                    margin_x=6, foreground=litegreen, **defaults),
-                widget.MemoryGraph(
-                    width=500, graph_color='22FF44', fill_color='118811',
-                    border_color='000000'),
-                widget.SwapGraph(
-                    width=500, graph_color='FF2020', fill_color='881111',
-                    border_color='000000'),
-                widget.Clock(
-                    '%H:%M %d/%m/%y', padding=6,
-                    foreground=litegreen, **defaults),
-            ],
-        28
-        )
+        top=bar.Bar([
+            widget.GroupBox(
+                this_screen_border='00FF00',
+                borderwidth=2, padding=4, active=litegreen, **defaults),
+            widget.Prompt(),
+            widget.WindowName(
+                margin_x=6, foreground=litegreen, **defaults),
+            widget.Clock(
+                '%H:%M %d/%m/%y', padding=6,
+                foreground=litegreen, **defaults),
+        ], top_bar_heigth),
+        bottom=bar.Bar([
+            widget.MemoryGraph(
+                width=1920, graph_color='22FF44', fill_color='118811',
+                samples=1000, frequency=1, border_color='000000'),
+        ], bottom_bar_heigth)
     )
 ]
 
@@ -115,20 +110,18 @@ def main(qtile):
                  'persist': True,
                  'spawn': 'urxvt',
                  'exclusive': True},
+        'www': {'init': True,
+                'exclusive': True
+                # 'spawn': 'chromium'
+            },
         'emacs': {'persist': True,
                   # 'spawn': 'emacs',
                   'exclusive': True},
-        'www': {'init': True,
-                'exclusive': True
-                  # 'spawn': 'chromium'
-            },
     }
 
     apps = [
         {'match': Match(
-            wm_class=[
-                'Guake.py', 'Xephyr',
-                'MPlayer', 'Exe', 'Gnome-keyring-prompt'],
+            wm_class=['Xephyr'],
             wm_type=['dialog', 'utility', 'splash']), 'float': True},
         {'match': Match(wm_class=['Chromium-browser', 'Minefield'],
                         role=['browser']), 'group': 'www'},
