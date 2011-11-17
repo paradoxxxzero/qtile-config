@@ -19,6 +19,7 @@ keys = [
     Key([mod], "Tab", lazy.layout.next()),
     Key([mod], "f", lazy.window.toggle_floating()),
     Key([mod], "g", lazy.togroup()),
+    Key([mod], "r", lazy.spawncmd()),
     Key([mod], "j", lazy.layout.up()),
     Key([mod], "k", lazy.layout.down()),
     Key([mod], "q", lazy.restart()),
@@ -64,7 +65,7 @@ screens = [
                     this_screen_border='0000FF',
                     borderwidth=2, padding=4, active=liteblue, **defaults),
                 widget.Sep(),
-                widget.Prompt(),
+                widget.Prompt(foreground=liteblue, **defaults),
                 widget.WindowName(
                     margin_x=6, foreground=liteblue, **defaults),
                 widget.Mpd(host='entrecote', **defaults),
