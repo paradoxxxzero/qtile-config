@@ -1,8 +1,9 @@
 from libqtile.manager import Key, Click, Drag, Screen, Group
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
+from socket import gethostname
 
-
+hostname = gethostname()
 mod = 'mod4'
 liteblue = '0066FF'
 litegreen = '009933'
@@ -59,43 +60,68 @@ groups = []
 defaults = {'font': 'monofur', 'fontsize': 12}
 top_bar_heigth = 26
 bottom_bar_heigth = 18
-screens = [
-    Screen(
+if hostname == 'ark':
+    screens = [Screen(
         top=bar.Bar([
             widget.GroupBox(
-                this_screen_border='0000FF',
-                borderwidth=2, padding=4, active=liteblue, **defaults),
+                borderwidth=2, font='monofur', fontsize=14, padding=4,
+                active="0066FF"),
             widget.Prompt(foreground=liteblue, **defaults),
             widget.WindowName(
-                margin_x=6, foreground=liteblue, **defaults),
-            widget.Systray(),
-            widget.Mpd(host='entrecote', **defaults)
-        ], top_bar_heigth),
-        bottom=bar.Bar([
+                font='monofur', fontsize=16, margin_x=6,
+                foreground="0066FF"),
+            widget.Mpd(host='arkr', **defaults),
             widget.CPUGraph(
-                width=1920, graph_color=liteblue, fill_color='0000FF',
-                samples=1000, frequency=0.1, border_color='000000'),
-        ], bottom_bar_heigth)
-    ),
-    Screen(
-        top=bar.Bar([
-            widget.GroupBox(
-                this_screen_border='00FF00',
-                borderwidth=2, padding=4, active=litegreen, **defaults),
-            widget.Prompt(),
-            widget.WindowName(
-                margin_x=6, foreground=litegreen, **defaults),
-            widget.Clock(
-                '%H:%M %d/%m/%y', padding=6,
-                foreground=litegreen, **defaults),
-        ], top_bar_heigth),
-        bottom=bar.Bar([
+                width=150, graph_color='0066FF', fill_color='001188',
+                border_color='000000'),
             widget.MemoryGraph(
-                width=1920, graph_color='22FF44', fill_color='118811',
-                samples=1000, frequency=1, border_color='000000'),
-        ], bottom_bar_heigth)
-    )
-]
+                width=150, graph_color='22FF44', fill_color='118811',
+                border_color='000000'),
+            widget.SwapGraph(
+                width=150, graph_color='FF2020', fill_color='881111',
+                border_color='000000'),
+            widget.Systray(),
+            widget.Clock(
+                '%H:%M %d/%m/%y', font='monofur', fontsize=18, padding=6,
+                foreground="0066FF")], 28),)]
+else:
+    screens = [
+        Screen(
+            top=bar.Bar([
+                widget.GroupBox(
+                    this_screen_border='0000FF',
+                    borderwidth=2, padding=4, active=liteblue, **defaults),
+                widget.Prompt(foreground=liteblue, **defaults),
+                widget.WindowName(
+                    margin_x=6, foreground=liteblue, **defaults),
+                widget.Systray(),
+                widget.Mpd(host='entrecote', **defaults)
+            ], top_bar_heigth),
+            bottom=bar.Bar([
+                widget.CPUGraph(
+                    width=1920, graph_color=liteblue, fill_color='0000FF',
+                    samples=1000, frequency=0.1, border_color='000000'),
+            ], bottom_bar_heigth)
+        ),
+        Screen(
+            top=bar.Bar([
+                widget.GroupBox(
+                    this_screen_border='00FF00', borderwidth=2,
+                    padding=4, active=litegreen, **defaults),
+                widget.Prompt(),
+                widget.WindowName(
+                    margin_x=6, foreground=litegreen, **defaults),
+                widget.Clock(
+                    '%H:%M %d/%m/%y', padding=6,
+                    foreground=litegreen, **defaults),
+            ], top_bar_heigth),
+            bottom=bar.Bar([
+                widget.MemoryGraph(
+                    width=1920, graph_color='22FF44', fill_color='118811',
+                    samples=1000, frequency=1, border_color='000000'),
+            ], bottom_bar_heigth)
+        )
+    ]
 
 # change focus on mouse over
 follow_mouse_focus = True
