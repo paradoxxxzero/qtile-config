@@ -64,26 +64,25 @@ if hostname == 'ark':
     screens = [Screen(
         top=bar.Bar([
             widget.GroupBox(
-                borderwidth=2, font='monofur', fontsize=14, padding=4,
-                active="0066FF"),
+                borderwidth=2, padding=4, active="0066FF",
+                this_screen_border='0066FF.8', **defaults),
             widget.Prompt(foreground=liteblue, **defaults),
-            widget.WindowName(
-                font='monofur', fontsize=16, margin_x=6,
-                foreground="0066FF"),
-            widget.Mpd(host='arkr', **defaults),
+            widget.WindowName(margin_x=6, foreground="0066FF", **defaults),
+            # widget.Mpd(host='arkr', **defaults),
             widget.CPUGraph(
-                width=150, graph_color='0066FF', fill_color='001188',
+                width=150, graph_color='0066FF', fill_color='0066FF.3',
                 border_color='000000'),
             widget.MemoryGraph(
-                width=150, graph_color='22FF44', fill_color='118811',
+                width=150, graph_color='22FF44', fill_color='22FF44.3',
                 border_color='000000'),
-            widget.SwapGraph(
-                width=150, graph_color='FF2020', fill_color='881111',
+            widget.NetGraph(
+                width=150, interface='wlan0',
+                graph_color='FF2020', fill_color='FF2020.3',
                 border_color='000000'),
             widget.Systray(),
             widget.Clock(
-                '%H:%M %d/%m/%y', font='monofur', fontsize=18, padding=6,
-                foreground="0066FF")], 28),)]
+                '%H:%M %d/%m/%y', padding=6, foreground="0066FF", **defaults
+            )], 28),)]
 else:
     screens = [
         Screen(
@@ -134,7 +133,7 @@ def main(qtile):
     groups = {
         'term': {'init': True,
                  'persist': True,
-                 'spawn': 'urxvt',
+                 # 'spawn': 'urxvt',
                  'exclusive': True},
         'www': {'init': True,
                 'exclusive': True
