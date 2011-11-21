@@ -41,23 +41,19 @@ keys = [
         'mpc -h entrecote volume +2')),
 ]
 
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
-]
-
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25),
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
 ]
 
 groups = []
 
-defaults = {'font': 'monofur', 'fontsize': 12}
+fonts = {'font': 'monofur', 'fontsize': 12}
+fontcolors = fonts.copy()
+green_fontcolors = fonts.copy()
+fontcolors['foreground'] = liteblue
+green_fontcolors['foreground'] = litegreen
 top_bar_heigth = 26
 bottom_bar_heigth = 18
 if hostname == 'ark':
@@ -65,10 +61,10 @@ if hostname == 'ark':
         top=bar.Bar([
             widget.GroupBox(
                 borderwidth=2, padding=4, active="0066FF",
-                this_screen_border='0066FF.8', **defaults),
-            widget.Prompt(foreground=liteblue, **defaults),
-            widget.WindowName(margin_x=6, foreground="0066FF", **defaults),
-            # widget.Mpd(host='arkr', **defaults),
+                this_screen_border='0066FF.8', **fonts),
+            widget.Prompt(**fontcolors),
+            widget.WindowName(margin_x=6, **fontcolors),
+            # widget.Mpd(host='arkr', **fontcolors),
             widget.CPUGraph(
                 width=150, graph_color='0066FF', fill_color='0066FF.3',
                 border_color='000000'),
@@ -80,44 +76,53 @@ if hostname == 'ark':
                 graph_color='FF2020', fill_color='FF2020.3',
                 border_color='000000'),
             widget.Systray(),
+            widget.CurrentLayout(**fontcolors),
             widget.Clock(
-                '%H:%M %d/%m/%y', padding=6, foreground="0066FF", **defaults
+                '%H:%M %d/%m/%y', padding=6, **fontcolors
             )], 28),)]
 else:
     screens = [
         Screen(
             top=bar.Bar([
                 widget.GroupBox(
-                    this_screen_border='0000FF',
-                    borderwidth=2, padding=4, active=liteblue, **defaults),
-                widget.Prompt(foreground=liteblue, **defaults),
+                    this_current_screen_border='0000ff',
+                    this_screen_border='0000bb',
+                    borderwidth=2, padding=4, active=liteblue, **fonts),
+                widget.Prompt(**fontcolors),
                 widget.WindowName(
-                    margin_x=6, foreground=liteblue, **defaults),
+                    margin_x=6, **fontcolors),
                 widget.Systray(),
-                widget.Mpd(host='entrecote', **defaults)
+                widget.Mpd(host='entrecote', **fontcolors),
+                widget.CurrentLayout(**fontcolors)
             ], top_bar_heigth),
             bottom=bar.Bar([
                 widget.CPUGraph(
                     width=1920, graph_color=liteblue, fill_color='0000FF',
-                    samples=1000, frequency=0.1, border_color='000000'),
+                    samples=1000, frequency=0.1, border_color='000000')
             ], bottom_bar_heigth)
         ),
         Screen(
             top=bar.Bar([
                 widget.GroupBox(
-                    this_screen_border='00FF00', borderwidth=2,
-                    padding=4, active=litegreen, **defaults),
+                    this_current_screen_border='00ff00',
+                    this_screen_border='00bb00',
+                    borderwidth=2,
+                    padding=4, active=litegreen, **fonts),
                 widget.Prompt(),
                 widget.WindowName(
-                    margin_x=6, foreground=litegreen, **defaults),
+                    margin_x=6, **green_fontcolors),
                 widget.Clock(
-                    '%H:%M %d/%m/%y', padding=6,
-                    foreground=litegreen, **defaults),
+                    '%H:%M %d/%m/%y', padding=6, **green_fontcolors),
+                widget.CurrentLayout(**fontcolors)
             ], top_bar_heigth),
             bottom=bar.Bar([
                 widget.MemoryGraph(
-                    width=1920, graph_color='22FF44', fill_color='118811',
+                    width=1920 / 2, graph_color='22FF44', fill_color='118811',
                     samples=1000, frequency=1, border_color='000000'),
+                widget.NetGraph(
+                    width=1920 / 2, graph_color='22FF99', fill_color='118855',
+                    samples=1000, frequency=1, border_color='000000',
+                    interface='eth0'),
             ], bottom_bar_heigth)
         )
     ]
@@ -133,6 +138,7 @@ def main(qtile):
     groups = {
         'term': {'init': True,
                  'persist': True,
+                 'layout': 'tile',
                  # 'spawn': 'urxvt',
                  'exclusive': True},
         'www': {'init': True,
