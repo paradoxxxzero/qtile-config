@@ -41,12 +41,6 @@ keys = [
         'mpc -h entrecote volume +2')),
 ]
 
-layouts = [
-    layout.Max(),
-    layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
-]
-
 groups = []
 
 fonts = {'font': 'monofur', 'fontsize': 12}
@@ -54,6 +48,16 @@ fontcolors = fonts.copy()
 green_fontcolors = fonts.copy()
 fontcolors['foreground'] = liteblue
 green_fontcolors['foreground'] = litegreen
+
+layouts = [
+    layout.Max(),
+    layout.Stack(stacks=2),
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
+    layout.TreeTab(**fontcolors),
+    layout.MonadTall(),
+    layout.Zoomy()
+]
+
 top_bar_heigth = 26
 bottom_bar_heigth = 18
 if hostname == 'ark':
