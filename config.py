@@ -47,6 +47,15 @@ layouts = [
     layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
 ]
 
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front())
+]
+
+
 groups = []
 
 fonts = {'font': 'monofur', 'fontsize': 12}
@@ -94,12 +103,13 @@ else:
                 widget.Systray(),
                 widget.Mpd(host='entrecote', **fontcolors),
                 widget.CurrentLayout(**fontcolors)
-            ], top_bar_heigth),
+            ], top_bar_heigth, background="000000.1"),
             bottom=bar.Bar([
                 widget.CPUGraph(
                     width=1920, graph_color=liteblue, fill_color='0000FF',
-                    samples=1000, frequency=0.1, border_color='000000')
-            ], bottom_bar_heigth)
+                    samples=1000, frequency=0.1, border_color='000000'
+                )
+            ], bottom_bar_heigth, background="000000.1")
         ),
         Screen(
             top=bar.Bar([
