@@ -41,12 +41,6 @@ keys = [
         'mpc -h entrecote volume +2')),
 ]
 
-layouts = [
-    layout.Max(),
-    layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
-]
-
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
@@ -55,7 +49,6 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
-
 groups = []
 
 fonts = {'font': 'monofur', 'fontsize': 12}
@@ -63,6 +56,16 @@ fontcolors = fonts.copy()
 green_fontcolors = fonts.copy()
 fontcolors['foreground'] = liteblue
 green_fontcolors['foreground'] = litegreen
+
+layouts = [
+    layout.Max(),
+    layout.Stack(stacks=2),
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
+    layout.TreeTab(**fontcolors),
+    layout.MonadTall(),
+    layout.Zoomy()
+]
+
 top_bar_heigth = 26
 bottom_bar_heigth = 18
 if hostname == 'ark':
