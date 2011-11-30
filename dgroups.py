@@ -16,9 +16,6 @@ class Match(object):
 
     def compare(self, client):
         for _type, rule in self._rules:
-            match_func = getattr(rule, 'match', None) or\
-                         getattr(rule, 'count')
-
             if _type == 'title':
                 value = client.name
             elif _type == 'wm_class':
@@ -30,8 +27,11 @@ class Match(object):
             else:
                 value = client.window.get_wm_window_role()
 
-            if value and match_func(value):
-                return True
+            if value:
+                match_func = getattr(rule, 'match', None)
+                if (match_func and match_func(value) or
+                    getattr(value, 'count')(rule) > 0):
+                    return True
         return False
 
 

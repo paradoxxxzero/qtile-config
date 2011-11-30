@@ -1,5 +1,5 @@
 #!/bin/sh
 
 pkill -f Xephyr
-Xephyr -ac -br -noreset -screen 800x400 :1 &
+Xephyr -ac -br -noreset -screen 1400x800 :1 &
 DISPLAY=:1.0 qtile

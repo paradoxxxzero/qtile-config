@@ -60,10 +60,10 @@ green_fontcolors['foreground'] = litegreen
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
-    layout.TreeTab(**fontcolors),
-    layout.MonadTall(),
-    layout.Zoomy()
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
+#    layout.TreeTab(**fontcolors),
+#    layout.MonadTall(),
+#    layout.Zoomy()
 ]
 
 top_bar_heigth = 26
@@ -165,11 +165,17 @@ def main(qtile):
 
     apps = [
         {'match': Match(
-            wm_class=['Xephyr'],
-            wm_type=['dialog', 'utility', 'splash']), 'float': True},
-        {'match': Match(wm_class=['Chromium-browser', 'Minefield'],
-                        role=['browser']), 'group': 'www'},
-        {'match': Match(wm_class=['URxvt']), 'group': 'term'},
-        {'match': Match(wm_class=['Emacs']), 'group': 'emacs'}
+            wm_type=['dialog', 'utility', 'splash']),
+         'float': True},
+        {'match': Match(
+            wm_class=['Chromium', 'Chromium-browser', 'Chrome', 'Minefield'],
+            role=['browser']),
+         'group': 'www'},
+        {'match': Match(title=['Developer Tools']),
+         'group': 'www-inspector'},
+        {'match': Match(wm_class=['URxvt']),
+         'group': 'term'},
+        {'match': Match(wm_class=['Emacs']),
+         'group': 'emacs'}
     ]
     DGroups(qtile, groups, apps, simple_key_binder(mod))
