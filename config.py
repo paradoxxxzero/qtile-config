@@ -152,14 +152,14 @@ def main(qtile):
         'term': {'init': True,
                  'persist': True,
                  'layout': 'tile',
-                 # 'spawn': 'urxvt',
+                 'spawn': 'urxvt',
                  'exclusive': True},
         'www': {'init': True,
                 'exclusive': True
                 # 'spawn': 'chromium'
             },
         'emacs': {'persist': True,
-                  # 'spawn': 'emacs',
+                  'spawn': 'emacs',
                   'exclusive': True},
     }
 
