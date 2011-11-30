@@ -1,4 +1,5 @@
-from libqtile.manager import Key, Click, Drag, Screen, Group
+from libqtile.dgroups import DGroups, Match, simple_key_binder
+from libqtile.manager import Key, Click, Drag, Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
 from socket import gethostname
@@ -145,7 +146,6 @@ follow_mouse_focus = True
 
 
 def main(qtile):
-    from dgroups import DGroups, Match, simple_key_binder
     global mod
 
     groups = {
