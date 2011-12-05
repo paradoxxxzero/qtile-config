@@ -78,6 +78,7 @@ if hostname == 'ark':
             widget.Prompt(**fontcolors),
             widget.WindowName(margin_x=6, **fontcolors),
             # widget.Mpd(host='arkr', **fontcolors),
+            widget.Notify(**fontcolors),
             widget.CPUGraph(
                 width=150, graph_color='0066FF', fill_color='0066FF.3',
                 border_color='000000'),
@@ -125,6 +126,7 @@ else:
                 widget.Prompt(),
                 widget.WindowName(
                     margin_x=6, **green_fontcolors),
+                widget.Notify(**green_fontcolors),
                 widget.Clock(
                     '%H:%M %d/%m/%y', padding=6, **green_fontcolors),
                 widget.CurrentLayout(**fontcolors)
