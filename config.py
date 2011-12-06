@@ -69,6 +69,8 @@ layouts = [
 
 top_bar_heigth = 26
 bottom_bar_heigth = 18
+
+
 if hostname == 'ark':
     screens = [Screen(
         top=bar.Bar([
@@ -129,7 +131,7 @@ else:
                 widget.Notify(**green_fontcolors),
                 widget.Clock(
                     '%H:%M %d/%m/%y', padding=6, **green_fontcolors),
-                widget.CurrentLayout(**fontcolors)
+                widget.CurrentLayout(**green_fontcolors)
             ], top_bar_heigth),
             bottom=bar.Bar([
                 widget.MemoryGraph(
