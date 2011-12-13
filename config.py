@@ -1,13 +1,20 @@
+import os
 from libqtile.dgroups import DGroups, Match, simple_key_binder
 from libqtile.manager import Key, Click, Drag, Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
 from socket import gethostname
+from subprocess import call
+
+# Inits
+xresources = os.path.expanduser('~/.Xresources')
+if os.path.exists(xresources):
+    call(['xrdb', '-merge', xresources])
 
 hostname = gethostname()
 mod = 'mod4'
 liteblue = '0066FF'
-litegreen = '009933'
+litegreen = '00BB55'
 keys = [
     Key([mod, "shift"], "Left", lazy.layout.decrease_ratio()),
     Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
@@ -70,7 +77,6 @@ layouts = [
 top_bar_heigth = 26
 bottom_bar_heigth = 18
 
-
 if hostname == 'ark':
     screens = [Screen(
         top=bar.Bar([
@@ -79,18 +85,25 @@ if hostname == 'ark':
                 this_screen_border='0066FF.8', **fonts),
             widget.Prompt(**fontcolors),
             widget.WindowName(margin_x=6, **fontcolors),
-            # widget.Mpd(host='arkr', **fontcolors),
+            widget.Mpd(host='arkr', foreground_progress='00aaff',
+                       **fontcolors),
             widget.Notify(**fontcolors),
-            widget.CPUGraph(
-                width=150, graph_color='0066FF', fill_color='0066FF.3',
-                border_color='000000'),
-            widget.MemoryGraph(
-                width=150, graph_color='22FF44', fill_color='22FF44.3',
-                border_color='000000'),
-            widget.NetGraph(
-                width=150, interface='wlan0',
-                graph_color='FF2020', fill_color='FF2020.3',
-                border_color='000000'),
+            widget.Systray(),
+            widget.CurrentLayout(**fontcolors),
+            widget.Clock(
+                '%H:%M %d/%m/%y', padding=6, **fontcolors
+            )], 28),)]
+elif os.getenv('DISPLAY') == ':5.0':
+    screens = [Screen(
+        top=bar.Bar([
+            widget.GroupBox(
+                borderwidth=2, padding=4, active="0066FF",
+                this_screen_border='0066FF.8', **fonts),
+            widget.Prompt(**fontcolors),
+            widget.WindowName(margin_x=6, **fontcolors),
+            widget.Mpd(host='entrecote', foreground_progress='00aaff',
+                       **fontcolors),
+            widget.Notify(**fontcolors),
             widget.Systray(),
             widget.CurrentLayout(**fontcolors),
             widget.Clock(
@@ -108,15 +121,10 @@ else:
                 widget.WindowName(
                     margin_x=6, **fontcolors),
                 widget.Systray(),
-                widget.Mpd(host='entrecote', **fontcolors),
+                widget.Mpd(host='entrecote', foreground_progress='00aaff',
+                           **fontcolors),
                 widget.CurrentLayout(**fontcolors)
-            ], top_bar_heigth, background="000000.1"),
-            bottom=bar.Bar([
-                widget.CPUGraph(
-                    width=1920, graph_color=liteblue, fill_color='0000FF',
-                    samples=1000, frequency=0.1, border_color='000000'
-                )
-            ], bottom_bar_heigth, background="000000.1")
+            ], top_bar_heigth, background="000000.1")
         ),
         Screen(
             top=bar.Bar([
@@ -128,20 +136,11 @@ else:
                 widget.Prompt(),
                 widget.WindowName(
                     margin_x=6, **green_fontcolors),
-                widget.Notify(**green_fontcolors),
+                widget.Notify(foreground_low='009900', **green_fontcolors),
                 widget.Clock(
                     '%H:%M %d/%m/%y', padding=6, **green_fontcolors),
                 widget.CurrentLayout(**green_fontcolors)
-            ], top_bar_heigth),
-            bottom=bar.Bar([
-                widget.MemoryGraph(
-                    width=1920 / 2, graph_color='22FF44', fill_color='118811',
-                    samples=1000, frequency=1, border_color='000000'),
-                widget.NetGraph(
-                    width=1920 / 2, graph_color='22FF99', fill_color='118855',
-                    samples=1000, frequency=1, border_color='000000',
-                    interface='eth0'),
-            ], bottom_bar_heigth)
+            ], top_bar_heigth)
         )
     ]
 
