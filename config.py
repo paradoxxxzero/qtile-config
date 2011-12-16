@@ -1,5 +1,4 @@
 import os
-from libqtile.dgroups import DGroups, Match, simple_key_binder
 from libqtile.manager import Key, Click, Drag, Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
@@ -10,6 +9,8 @@ from subprocess import call
 xresources = os.path.expanduser('~/.Xresources')
 if os.path.exists(xresources):
     call(['xrdb', '-merge', xresources])
+
+call(['xsetroot', '-cursor_name', 'left_ptr'])
 
 hostname = gethostname()
 mod = 'mod4'
@@ -68,10 +69,12 @@ green_fontcolors['foreground'] = litegreen
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF')
-#    layout.TreeTab(**fontcolors),
-#    layout.MonadTall(),
-#    layout.Zoomy()
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
+    layout.RatioTile(),
+    layout.Slice(),
+    layout.TreeTab(**fontcolors),
+    layout.MonadTall(),
+    layout.Zoomy()
 ]
 
 top_bar_heigth = 26
@@ -121,10 +124,10 @@ else:
                 widget.WindowName(
                     margin_x=6, **fontcolors),
                 widget.Systray(),
-                widget.Mpd(host='entrecote', foreground_progress='00aaff',
-                           **fontcolors),
+               widget.Mpd(host='entrecote', foreground_progress='00aaff',
+                          **fontcolors),
                 widget.CurrentLayout(**fontcolors)
-            ], top_bar_heigth, background="000000.1")
+            ], top_bar_heigth, background="000000")
         ),
         Screen(
             top=bar.Bar([
@@ -149,7 +152,7 @@ follow_mouse_focus = True
 
 
 def main(qtile):
-    global mod
+    from libqtile.dgroups import DGroups, Match, simple_key_binder
 
     groups = {
         'term': {'init': True,
@@ -158,8 +161,8 @@ def main(qtile):
                  'spawn': 'urxvt',
                  'exclusive': True},
         'www': {'init': True,
-                'exclusive': True
-                # 'spawn': 'chromium'
+                'exclusive': True,
+                'spawn': 'chromium'
             },
         'emacs': {'persist': True,
                   'spawn': 'emacs',
@@ -181,4 +184,4 @@ def main(qtile):
         {'match': Match(wm_class=['Emacs']),
          'group': 'emacs'}
     ]
-    DGroups(qtile, groups, apps, simple_key_binder(mod))
+    DGroups(qtile, groups, apps, simple_key_binder('mod4'))
