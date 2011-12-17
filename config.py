@@ -76,21 +76,21 @@ if hostname == 'ark':
         top=bar.Bar([
             widget.GroupBox(
                 borderwidth=2, padding=4, active="0066FF",
-                this_screen_border='0066FF.8', **fonts),
+                this_current_screen_border='0000ff', **fonts),
             widget.Prompt(**fontcolors),
             widget.WindowName(margin_x=6, **fontcolors),
-            # widget.Mpd(host='arkr', **fontcolors),
+            widget.Mpd(host='arkr', **fontcolors),
             widget.Notify(**fontcolors),
-            widget.CPUGraph(
-                width=150, graph_color='0066FF', fill_color='0066FF.3',
-                border_color='000000'),
-            widget.MemoryGraph(
-                width=150, graph_color='22FF44', fill_color='22FF44.3',
-                border_color='000000'),
-            widget.NetGraph(
-                width=150, interface='wlan0',
-                graph_color='FF2020', fill_color='FF2020.3',
-                border_color='000000'),
+            # widget.CPUGraph(
+            #     width=150, graph_color='0066FF', fill_color='0066FF.3',
+            #     border_color='000000'),
+            # widget.MemoryGraph(
+            #     width=150, graph_color='22FF44', fill_color='22FF44.3',
+            #     border_color='000000'),
+            # widget.NetGraph(
+            #     width=150, interface='wlan0',
+            #     graph_color='FF2020', fill_color='FF2020.3',
+            #     border_color='000000'),
             widget.Systray(),
             widget.CurrentLayout(**fontcolors),
             widget.Clock(
