@@ -13,6 +13,12 @@ if os.path.exists(xresources):
 call(['xsetroot', '-cursor_name', 'left_ptr'])
 
 hostname = gethostname()
+if hostname == 'ark':
+    mpd_host = 'arkr'
+else:
+    mpd_host = 'entrecote'
+mpc = 'mpc -h %s ' % mpd_host
+
 mod = 'mod4'
 liteblue = '0066FF'
 litegreen = '00BB55'
@@ -43,11 +49,12 @@ keys = [
     Key([mod], "BackSpace", lazy.spawn(
         "dmenu_run -i -b -fn 'monofur:pixelsize=16:antialias=true'"
         " -p 'Run' -nf '#ffffff' -nb '#202020'")),
-    Key([mod], "XF86AudioPlay", lazy.spawn('mpc -h entrecote toggle')),
-    Key([mod], "XF86AudioLowerVolume", lazy.spawn(
-        'mpc -h entrecote volume -2')),
-    Key([mod], "XF86AudioRaiseVolume", lazy.spawn(
-        'mpc -h entrecote volume +2')),
+    Key([mod], "XF86AudioPlay", lazy.spawn(mpc + 'toggle')),
+    Key([mod], "XF86AudioPrev", lazy.spawn(mpc + 'prev')),
+    Key([mod], "XF86AudioNext", lazy.spawn(mpc + 'next')),
+    Key([mod], "XF86AudioStop", lazy.spawn(mpc + 'stop')),
+    Key([mod], "XF86AudioLowerVolume", lazy.spawn(mpc + 'volume -2')),
+    Key([mod], "XF86AudioRaiseVolume", lazy.spawn(mpc + 'volume +2')),
 ]
 
 mouse = [
