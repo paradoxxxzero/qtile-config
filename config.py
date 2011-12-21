@@ -13,6 +13,13 @@ if os.path.exists(xresources):
 call(['xsetroot', '-cursor_name', 'left_ptr'])
 
 hostname = gethostname()
+if hostname == 'arkw':
+    call(['xrandr', '--output', 'VGA1', '--mode', '1920x1080'])
+    call(['xrandr', '--output', 'HDMI1', '--mode', '1920x1080',
+          '--right-of', 'VGA1'])
+
+call(['feh', '--bg-scale', '~/colorback.jpg'])
+
 mod = 'mod4'
 liteblue = '0066FF'
 litegreen = '00BB55'
@@ -70,7 +77,7 @@ layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
     layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
-    layout.RatioTile(),
+    layout.RatioTile(border_normal='#000066', border_focus='#0000FF'),
     layout.Slice(),
     layout.TreeTab(**fontcolors),
     layout.MonadTall(),
@@ -157,7 +164,7 @@ def main(qtile):
     groups = {
         'term': {'init': True,
                  'persist': True,
-                 'layout': 'tile',
+                 'layout': 'ratiotile',
                  'spawn': 'urxvt',
                  'exclusive': True},
         'www': {'init': True,
