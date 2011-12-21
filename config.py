@@ -83,10 +83,10 @@ fontcolors['foreground'] = liteblue
 green_fontcolors['foreground'] = litegreen
 
 layouts = [
-    layout.Max(),
-    layout.Stack(stacks=2),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
     layout.RatioTile(border_normal='#000066', border_focus='#0000FF'),
+    layout.Max(),
+    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
+    layout.Stack(stacks=2),
     layout.Slice(),
     layout.TreeTab(**fontcolors),
     layout.MonadTall(),
