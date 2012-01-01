@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from libqtile.manager import Key, Click, Drag, Screen
 from libqtile.command import lazy
@@ -12,19 +13,32 @@ if os.path.exists(xresources):
 
 call(['xsetroot', '-cursor_name', 'left_ptr'])
 
+
 hostname = gethostname()
 
 mpd_host = ''
+layout_variant = ''
 if hostname == 'ark':
     mpd_host = 'arkr'
+    layout_variant = '"oss, bepo"'
 
 elif hostname == 'arkw':
     mpd_host = 'entrecote'
+    layout_variant = '"bepo, oss"'
     call(['xrandr', '--output', 'VGA1', '--mode', '1920x1080'])
     call(['xrandr', '--output', 'HDMI1', '--mode', '1920x1080',
           '--right-of', 'VGA1'])
 
 call(['feh', '--bg-scale', '~/colorback.jpg'])
+
+call(['setxkbmap',
+      '-layout', '"fr, fr, us"',
+      '-variant', layout_variant,
+      '-option', '"grp:shifts_toggle"'])
+
+xmodmap = os.path.expanduser('~/.Xmodmap')
+if os.path.exists(xmodmap):
+    call(['xmodmap', xmodmap])
 
 mpc = 'mpc -h %s ' % mpd_host
 
@@ -108,6 +122,13 @@ if hostname == 'ark':
                        **fontcolors),
             widget.Notify(**fontcolors),
             widget.Systray(),
+            widget.Battery(
+                energy_now_file='charge_now',
+                energy_full_file='charge_full',
+                power_now_file='current_now',
+                charge_char='↑',
+                discharge_char='↓',
+                **fontcolors),
             widget.CurrentLayout(**fontcolors),
             widget.Clock(
                 '%H:%M %d/%m/%y', padding=6, **fontcolors
