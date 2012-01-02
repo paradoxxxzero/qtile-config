@@ -81,17 +81,22 @@ fontcolors = fonts.copy()
 green_fontcolors = fonts.copy()
 fontcolors['foreground'] = liteblue
 green_fontcolors['foreground'] = litegreen
+borders = {
+    'border_normal': '#000066',
+    'border_focus': '#0000FF'
+}
 
 layouts = [
-    layout.RatioTile(border_normal='#000066', border_focus='#0000FF'),
+    layout.RatioTile(**borders),
     layout.Max(),
-    layout.Tile(ratio=0.25, border_normal='#000066', border_focus='#0000FF'),
+    layout.Tile(ratio=0.25, **borders),
     layout.Stack(stacks=2),
     layout.Slice(),
     layout.TreeTab(**fontcolors),
     layout.MonadTall(),
     layout.Zoomy()
 ]
+floating_layout = layout.Floating(**borders)
 
 top_bar_heigth = 26
 bottom_bar_heigth = 18
