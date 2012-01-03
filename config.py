@@ -29,7 +29,7 @@ elif hostname == 'arkw':
     call(['xrandr', '--output', 'HDMI1', '--mode', '1920x1080',
           '--right-of', 'VGA1'])
 
-call(['feh', '--bg-scale', '~/colorback.jpg'])
+call(['feh', '--bg-scale', os.path.expanduser('~/colorback.jpg')])
 
 call(['setxkbmap',
       '-layout', '"fr, fr, us"',
@@ -97,18 +97,19 @@ fontcolors['foreground'] = liteblue
 green_fontcolors['foreground'] = litegreen
 borders = {
     'border_normal': '#000066',
-    'border_focus': '#0000FF'
+    'border_focus': '#0000FF',
+    'border_width': 2
 }
 
 layouts = [
     layout.RatioTile(**borders),
     layout.Max(),
     layout.Tile(ratio=0.25, **borders),
-    layout.Stack(stacks=2),
-    layout.Slice(),
+    layout.Stack(stacks=2, **borders),
+    layout.MonadTall(**borders),
+    layout.Zoomy(**borders),
     layout.TreeTab(**fontcolors),
-    layout.MonadTall(),
-    layout.Zoomy()
+    layout.Slice()
 ]
 floating_layout = layout.Floating(**borders)
 
@@ -169,7 +170,7 @@ else:
                widget.Mpd(host='entrecote', foreground_progress='00aaff',
                           **fontcolors),
                 widget.CurrentLayout(**fontcolors)
-            ], top_bar_heigth, background="000000")
+            ], top_bar_heigth)
         ),
         Screen(
             top=bar.Bar([
