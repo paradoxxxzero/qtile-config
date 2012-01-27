@@ -2,4 +2,4 @@
 
 pkill -f Xephyr
 Xephyr -ac -br -noreset -screen 1400x800 :5 &
-DISPLAY=:5.0 qtile
+DISPLAY=:5.0 qtile-session

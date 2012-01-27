@@ -5,6 +5,8 @@ from libqtile.command import lazy
 from libqtile import layout, bar, widget
 from socket import gethostname
 from subprocess import call
+from libqtile.widget.crashme import _CrashMe
+from libqtile.dgroups import DGroups, Match, simple_key_binder
 
 # Inits
 xresources = os.path.expanduser('~/.Xresources')
@@ -13,7 +15,7 @@ if os.path.exists(xresources):
 
 call(['xsetroot', '-cursor_name', 'left_ptr'])
 
-
+image = os.path.expanduser('~/colorback.jpg')
 hostname = gethostname()
 
 mpd_host = ''
@@ -29,7 +31,7 @@ elif hostname == 'arkw':
     call(['xrandr', '--output', 'HDMI1', '--mode', '1920x1080',
           '--right-of', 'VGA1'])
 
-call(['feh', '--bg-scale', os.path.expanduser('~/colorback.jpg')])
+call(['feh', '--bg-scale', image])
 
 call(['setxkbmap',
       '-layout', '"fr, fr, us"',
@@ -53,6 +55,7 @@ keys = [
     Key([mod, "shift"], "j", lazy.spawn("amixer -c 0 -q set Master 2dB-")),
     Key([mod, "shift"], "k", lazy.spawn("amixer -c 0 -q set Master 2dB+")),
     Key([mod, "shift"], "q", lazy.shutdown()),
+    Key([mod, "shift"], "p", lazy.pause()),
     Key([mod, "shift"], "space", lazy.layout.rotate()),
     Key([mod], "Left", lazy.group.prevgroup()),
     Key([mod], "Right", lazy.group.nextgroup()),
@@ -65,7 +68,8 @@ keys = [
     Key([mod], "j", lazy.layout.up()),
     Key([mod], "k", lazy.layout.down()),
     Key([mod], "q", lazy.restart()),
-    Key([mod], "l", lazy.spawn('alock -auth pam -bg blank')),
+    Key([mod], "l", lazy.spawn(
+        'alock -auth pam -bg image:center,file=' + image)),
     Key([mod], "space", lazy.nextlayout()),
     Key([mod], "Return", lazy.spawn('urxvt')),
     Key([mod], "w", lazy.window.kill()),
@@ -85,7 +89,10 @@ mouse = [
          start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
+    Click([mod], "Button2", lazy.window.bring_to_front()),
+    Click([], "Button8", lazy.group.prevgroup()),
+    Click([], "Button9", lazy.group.nextgroup()),
+    Click([mod], "Button10", lazy.window.kill())
 ]
 
 groups = []
@@ -149,6 +156,7 @@ elif os.getenv('DISPLAY') == ':5.0':
             widget.WindowName(margin_x=6, **fontcolors),
             widget.Mpd(host='entrecote', foreground_progress='00aaff',
                        **fontcolors),
+            _CrashMe(),
             widget.Notify(**fontcolors),
             widget.Systray(),
             widget.CurrentLayout(**fontcolors),
@@ -195,8 +203,6 @@ follow_mouse_focus = True
 
 
 def main(qtile):
-    from libqtile.dgroups import DGroups, Match, simple_key_binder
-
     groups = {
         'term': {'init': True,
                  'persist': True,
@@ -227,4 +233,4 @@ def main(qtile):
         {'match': Match(wm_class=['Emacs']),
          'group': 'emacs'}
     ]
-    DGroups(qtile, groups, apps, simple_key_binder('mod4'))
+    DGroups(qtile, groups, apps, simple_key_binder(mod))
