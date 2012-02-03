@@ -105,7 +105,7 @@ green_fontcolors['foreground'] = litegreen
 borders = {
     'border_normal': '#000066',
     'border_focus': '#0000FF',
-    'border_width': 2
+    'border_width': 2 if hostname != 'arkleeenux' else 1
 }
 
 layouts = [
@@ -123,7 +123,29 @@ floating_layout = layout.Floating(**borders)
 top_bar_heigth = 26
 bottom_bar_heigth = 18
 
-if hostname == 'ark':
+if hostname == 'arkleeenux':
+    fonts['fontsize'] = fontcolors['fontsize'] = 8
+    screens = [Screen(
+        top=bar.Bar([
+            widget.GroupBox(
+                borderwidth=1, padding=0, active="0066FF",
+                this_current_screen_border='0000ff', **fonts),
+            widget.Prompt(**fontcolors),
+            widget.WindowName(margin_x=6, **fontcolors),
+            widget.Notify(**fontcolors),
+            widget.Systray(),
+            widget.Battery(
+                energy_now_file='charge_now',
+                energy_full_file='charge_full',
+                power_now_file='current_now',
+                charge_char='↑',
+                discharge_char='↓',
+                **fontcolors),
+            widget.CurrentLayout(**fontcolors),
+            widget.Clock(
+                '%H:%M %d/%m/%y', padding=6, **fontcolors
+            )], 14),)]
+elif hostname == 'arkr':
     screens = [Screen(
         top=bar.Bar([
             widget.GroupBox(
